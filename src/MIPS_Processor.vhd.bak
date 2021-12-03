@@ -152,6 +152,89 @@ architecture structure of MIPS_Processor is
          o_F          : out std_logic);
     end component;
 
+  component IFIDPipeline is
+   generic(N : integer := 32);
+   port(
+	clk		:in std_logic;
+	reset		:in std_logic;
+	flush		:in std_logic;
+	stall		:in std_logic;
+	add4Datain	:in std_logic_vector(N-1 downto 0);
+	imemDatain	:in std_logic_vector(N-1 downto 0);
+	add4Dataout	:out std_logic_vector(N-1 downto 0);
+	imemDataout	:out std_logic_vector(N-1 downto 0));	
+   end component;
+
+  component IDEXPipeline is
+    generic(N : integer := 32);
+    port(
+  	clk		:in std_logic;
+	reset		:in std_logic;
+	flush		:in std_logic;
+	stall		:in std_logic;
+	
+	
+	jumpinstrin	:in std_logic_vector(25 downto 0);
+	rsDatain	:in std_logic_vector(N-1 downto 0);
+	rtDatain	:in std_logic_vector(N-1 downto 0);
+	Immedin		:in std_logic_vector(N-1 downto 0);
+	ALUcontrolin	:in std_logic_vector(14 downto 0);
+	setPCin		:in std_logic_vector(N-1 downto 0);
+	writeDatain	:in std_logic_vector(4 downto 0);
+	writeDataout	:out std_logic_vector(4 downto 0);
+	setPCout	:out std_logic_vector(N-1 downto 0);
+	ALUcontrolout	:out std_logic_vector(14 downto 0);
+	rsDataout	:out std_logic_vector(N-1 downto 0);	
+	rtDataout	:out std_logic_vector(N-1 downto 0);
+	Immedout	:out std_logic_vector(N-1 downto 0);
+	jumpinstrout	:out std_logic_vector(25 downto 0);
+	
+
+	--Control I/O
+	branchin	:in std_logic;
+	memWrin		:in std_logic;
+	regdstin	:in std_logic;
+	memtoregin	:in std_logic;
+	jumpin		:in std_logic_vector(1 downto 0);
+	zeroin		:in std_logic;
+	zeroout		:out std_logic;
+	memtoregout	:out std_logic;
+	branchout	:out std_logic;
+	regdstout	:out std_logic;
+	memWrout	:out std_logic;
+	jumpout		:out std_logic_vector(1 downto 0));
+  end component;
+
+  component EXMEMPipeline is
+   generic(N : integer := 32);
+   port(
+	clk		:in std_logic;
+	reset		:in std_logic;
+	flush		:in std_logic;
+	stall		:in std_logic;
+	
+	jumpinstrin	:in std_logic_vector(25 downto 0);
+	ALUin		:in std_logic_vector(N-1 downto 0);
+	writeDatain	:in std_logic_vector(4 downto 0); 
+	setPCin		:in std_logic_vector(N-1 downto 0);
+	setPCout	:out std_logic_vector(N-1 downto 0);
+	writeDataout	:out std_logic_vector(4 downto 0);
+	jumpinstrout	:out std_logic_vector(25 downto 0);
+	ALUout		:out std_logic_vector(N-1 downto 0);
+	
+	--control I/O
+	memWrin		:in std_logic;
+	memtoregin	:in std_logic;
+	zeroin		:in std_logic;
+	branchin	:in std_logic;
+	jumpin		:in std_logic_vector(1 downto 0);
+	branchout	:out std_logic;
+	jumpout		:out std_logic_vector(1 downto 0);
+	zeroout		:out std_logic;
+	memtoregout	:out std_logic;	
+	memWrout	:out std_logic);
+  end component;
+
   signal s_ReadB : std_logic_vector(4 downto 0);
   signal s_Data1 : std_logic_vector(N-1 downto 0);
   signal s_Data2 : std_logic_vector(N-1 downto 0);

@@ -30,7 +30,6 @@ entity IDEXPipeline is
 	branchin	:in std_logic;
 	memWrin		:in std_logic;
 	regdstin	:in std_logic;
-	writeregin	:in std_logic;
 	memtoregin	:in std_logic;
 	jumpin		:in std_logic_vector(1 downto 0);
 	zeroin		:in std_logic;
@@ -38,7 +37,6 @@ entity IDEXPipeline is
 	memtoregout	:out std_logic;
 	branchout	:out std_logic;
 	regdstout	:out std_logic;
-	writeregout	:out std_logic;	
 	memWrout	:out std_logic;
 	jumpout		:out std_logic_vector(1 downto 0));
 	--
@@ -83,14 +81,12 @@ begin
 	storeimmedData <= immedin when flush = '0' else
 		     	 x"00000000";
 	ALUcontrolData <= ALUcontrolin when flush = '0' else
-		     	 x"0000";
+		     	 "000000000000000";
 	storejumpinstrdata <= jumpinstrin when flush = '0' else
-		     	 x"0000000";
+		     	 "0000000000000000000000000000";
 	memWrData <= memWrin when flush = '0' else
 		     	'0';
 	regdstData <= regdstin when flush = '0' else
-		     	'0';
-	writeregData <= writeregin when flush = '0' else
 		     	'0';
 	storezerodata <= zeroin when flush = '0' else
 			'0';
@@ -103,7 +99,7 @@ begin
 	storejumpdata	<= jumpin when flush = '0' else
 			x"0";
 	storewritedata	<= writeDatain when flush = '0' else
-			x"00";
+			"00000";
 	
 	rsdata: nreg port map(clk,reset,s_write,storersData,rsDataout);
 	rtdata: nreg port map(clk,reset,s_write,storertData,rtDataout);
@@ -133,7 +129,6 @@ begin
 	memtoreg: dffg port map(clk,reset,s_write,memtoregData,memtoregout);
 	memWrdatareg: dffg port map(clk,reset,s_write,memWrData,memwrout);
 	regdstdatareg: dffg port map(clk,reset,s_write,regdstData,regdstout);
-	writeregdatareg: dffg port map(clk,reset,s_write,writeregData,writeregout);
 	branchdata: dffg port map(clk,reset,s_write,storebranchdata,branchout);
 	zerodata: dffg port map(clk,reset,s_write,storezerodata,zeroout);
 

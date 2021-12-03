@@ -63,7 +63,7 @@ begin
 
 
 	storeALUData <= ALUin when flush = '0' else
-			'0';
+			x"00000000";
 	memWrData <= memWrin when flush = '0' else
 		     	'0';
 	storememtoregData <= memtoregin when flush = '0' else
@@ -74,7 +74,7 @@ begin
 			'0';
 	storejumpdata	<= jumpin when flush = '0' else
 			x"0";
-	storejumpinstrdata <= jumpinstrdata when flush = '0' else
+	storejumpinstrdata <= jumpinstrin when flush = '0' else
 			x"0000000";
 	storewriteData	<= writeDatain when flush = '0' else
 			x"00";

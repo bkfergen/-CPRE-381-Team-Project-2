@@ -27,7 +27,7 @@ entity EXMEMPipeline is
 	branchout	:out std_logic;
 	jumpout		:out std_logic_vector(1 downto 0);
 	zeroout		:out std_logic;
-	writeregout	:out std_logic;	
+	memtoregout	:out std_logic;	
 	memWrout	:out std_logic);
 end EXMEMPipeline;
 
@@ -63,7 +63,7 @@ begin
 
 
 	storeALUData <= ALUin when flush = '0' else
-			'0';
+			x"00000000";
 	memWrData <= memWrin when flush = '0' else
 		     	'0';
 	storememtoregData <= memtoregin when flush = '0' else

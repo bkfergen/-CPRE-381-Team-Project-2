@@ -97,7 +97,7 @@ begin
 	storesetPCdata	<= setPCin when flush = '0' else
 			x"00000000";
 	storejumpdata	<= jumpin when flush = '0' else
-			'00';
+			x"0";
 	storewritedata	<= writeDatain when flush = '0' else
 			x"00";
 	
@@ -124,7 +124,7 @@ begin
 	G_NBit_dffg_4: for i in 0 to 4 generate
 	writedata: dffg
 			port map(clk,reset,s_write, storewritedata(i), writeDataout(i));
-	end generate G_NBit_dffg_3;
+	end generate G_NBit_dffg_4;
 	
 	
 	memWrdatareg: dffg port map(clk,reset,s_write,memWrData,memwrout);

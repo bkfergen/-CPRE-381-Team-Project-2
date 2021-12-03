@@ -61,6 +61,11 @@ begin
 	memtoregdata: dffg port map(clk,reset,s_write,storememtoregData,memtoregout);
 	ALUdata: nreg port map(clk,reset,s_write,storeALUData,ALUout);
 	memData: nreg port map(clk,reset,s_write,storememData,memDataout);
+
+	G_NBit_dffg_4: for i in 0 to 4 generate
+	writeData: dffg
+		port map(clk,reset,s_write, storewriteData(i), writeDataout(i));
+	end generate G_NBit_dffg_4;
   
   
 end structural;

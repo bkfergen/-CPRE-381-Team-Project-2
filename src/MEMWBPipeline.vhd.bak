@@ -44,7 +44,7 @@ architecture structural of MEMWBPipeline is
 
 signal storeALUData,storememData	:std_logic_vector(N-1 downto 0);
 signal storewriteData		:std_logic_vector(4 downto 0);
-signal storememtoregdata :std_logic;
+signal s_write,storememtoregdata :std_logic;
 
 begin
 	s_write <= NOT stall;

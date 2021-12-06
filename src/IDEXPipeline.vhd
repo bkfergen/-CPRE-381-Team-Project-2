@@ -81,9 +81,9 @@ begin
 	storeimmedData <= immedin when flush = '0' else
 		     	 x"00000000";
 	ALUcontrolData <= ALUcontrolin when flush = '0' else
-		     	 x"0000";
+		     	 "000000000000000";
 	storejumpinstrdata <= jumpinstrin when flush = '0' else
-		     	 x"0000000";
+		     	 "00000000000000000000000000";
 	memWrData <= memWrin when flush = '0' else
 		     	'0';
 	regdstData <= regdstin when flush = '0' else
@@ -97,9 +97,9 @@ begin
 	storesetPCdata	<= setPCin when flush = '0' else
 			x"00000000";
 	storejumpdata	<= jumpin when flush = '0' else
-			x"0";
+			"00";
 	storewritedata	<= writeDatain when flush = '0' else
-			x"00";
+			"00000";
 	
 	rsdata: nreg port map(clk,reset,s_write,storersData,rsDataout);
 	rtdata: nreg port map(clk,reset,s_write,storertData,rtDataout);

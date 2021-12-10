@@ -1,18 +1,28 @@
 # test all the instructions
 
-	.global  main
+	#.global  main
 	
 main:
 	addi $a1, $zero, 10 	#$a1 = 10
 	addi $a2, $zero, 20  	#$a2 = 20
+	NOP
+	NOP
 	add  $t3, $a1, $a2   	#$t3 = $a1 + $a2 = 30 
 	
 	addi $a3, $zero, -16 	#$a3 = -16
+	NOP
+	NOP
 	addu $t2, $zero, $a3 	#$t2 = 0xfffffff0
 	
+	NOP
+	NOP
 	addiu $a3, $t3, -2 	#$a3 = 28
+	NOP
+	NOP
 	addiu $a0, $a3, -30     #$a0 = 0xfffffffe
 	
+	NOP
+	NOP
 	and   $t1, $a0, $t2	#$a0 & $t2 = 0xfffffff0
 	NOP
 	NOP
@@ -86,5 +96,5 @@ main:
 	exit:
 	
 	
-	
+	halt
 	

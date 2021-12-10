@@ -10,8 +10,10 @@ entity IFIDPipeline is
 	stall		:in std_logic;
 	add4Datain	:in std_logic_vector(N-1 downto 0);
 	imemDatain	:in std_logic_vector(N-1 downto 0);
+	pcAddrin	:in std_logic_vector(31 downto 0);
 	add4Dataout	:out std_logic_vector(N-1 downto 0);
-	imemDataout	:out std_logic_vector(N-1 downto 0));	
+	imemDataout	:out std_logic_vector(N-1 downto 0);	
+	pcAddrout	:out std_logic_vector(N-1 downto 0));
 end IFIDPipeline;
 
 architecture structural of IFIDPipeline is
@@ -24,7 +26,7 @@ architecture structural of IFIDPipeline is
        		o_Q          : out std_logic_vector(N-1 downto 0));   -- Data value output
 	end component;
 
-signal storeAdd4Data, storeImemData	:std_logic_vector(N-1 downto 0);
+signal storeAdd4Data, storeImemData, storepcAddr	:std_logic_vector(N-1 downto 0);
 signal s_write	:std_logic;
 
 
@@ -35,9 +37,12 @@ begin
 		      	 x"00000000";
 	storeImemData <= imemDatain when flush = '0' else
 		     	 x"00000000";
+	storepcAddr <= pcAddrin when flush = '0' else
+		     	 x"00000000";
 
 	add4data: nreg port map(clk,reset,s_write,storeAdd4Data,add4Dataout);
 	imemdata: nreg port map(clk,reset,s_write,storeImemData,imemDataout);
+	pcAddrdata: nreg port map(clk,reset,s_write,storepcAddr,pcAddrout);
 
 
 

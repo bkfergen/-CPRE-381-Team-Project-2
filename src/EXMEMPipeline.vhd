@@ -9,26 +9,24 @@ entity EXMEMPipeline is
 	flush		:in std_logic;
 	stall		:in std_logic;
 	
-	jumpinstrin	:in std_logic_vector(25 downto 0);
-	ALUin		:in std_logic_vector(N-1 downto 0);
 	writeDatain	:in std_logic_vector(4 downto 0); 
-	setPCin		:in std_logic_vector(N-1 downto 0);
-	setPCout	:out std_logic_vector(N-1 downto 0);
+	ALUOutputin	:in std_logic_vector(31 downto 0);
+	data2regin	:in std_logic_vector(31 downto 0);
+	haltin		:in std_logic;
+	instin		:in std_logic_vector(31 downto 0);
 	writeDataout	:out std_logic_vector(4 downto 0);
-	jumpinstrout	:out std_logic_vector(25 downto 0);
-	ALUout		:out std_logic_vector(N-1 downto 0);
+	ALUOutputout	:out std_logic_vector(31 downto 0);
+	data2regout	:out std_logic_vector(31 downto 0);
+	haltout		:out std_logic;
+	instout		:out std_logic_vector(31 downto 0);
 	
 	--control I/O
 	memWrin		:in std_logic;
 	memtoregin	:in std_logic;
-	zeroin		:in std_logic;
-	branchin	:in std_logic;
-	jumpin		:in std_logic_vector(1 downto 0);
-	branchout	:out std_logic;
-	jumpout		:out std_logic_vector(1 downto 0);
-	zeroout		:out std_logic;
+	regwrin		:in std_logic;
 	memtoregout	:out std_logic;	
-	memWrout	:out std_logic);
+	memWrout	:out std_logic;
+	regwrout	:out std_logic);
 end EXMEMPipeline;
 
 architecture structural of EXMEMPipeline is
@@ -50,11 +48,10 @@ architecture structural of EXMEMPipeline is
         	o_Q          : out std_logic);   -- Data value output
 	end component;
 
-signal storeALUData,storesetPCdata	:std_logic_vector(N-1 downto 0);
 signal storejumpdata	:std_logic_vector(1 downto 0);
-signal storejumpinstrdata :std_logic_vector(25 downto 0);
 signal storewriteData	  :std_logic_vector(4 downto 0);
-signal s_write,ALUsrcData, memWrData, writeregData, storezerodata, storebranchdata, storememtoregData   :std_logic;
+signal storeALUOutput, storedata2reg, storeInst	:std_logic_vector(31 downto 0);
+signal s_write,ALUsrcData, memWrData, writeregData, storezerodata, storebranchdata, storememtoregData, haltData, storeRegWr   :std_logic;
 
 
 begin
@@ -62,48 +59,36 @@ begin
 	
 
 
-	storeALUData <= ALUin when flush = '0' else
-			x"00000000";
 	memWrData <= memWrin when flush = '0' else
+		     	'0';
+	haltData <= haltin when flush = '0' else
 		     	'0';
 	storememtoregData <= memtoregin when flush = '0' else
 		     	'0';
-	storezerodata <= zeroin when flush = '0' else
-			'0';
-	storebranchdata <= branchin when flush = '0' else
-			'0';
-	storejumpdata	<= jumpin when flush = '0' else
-			"00";
-	storejumpinstrdata <= jumpinstrin when flush = '0' else
-			"00000000000000000000000000";
 	storewriteData	<= writeDatain when flush = '0' else
 			"00000";
-	storesetPCdata	<= setPCin when flush = '0' else
-			x"00000000";
-	
+	storeALUOutput <= ALUOutputin when flush = '0' else
+		     	 x"00000000";
+	storeInst <= instin when flush = '0' else
+		     	 x"00000000";
+	storedata2reg <= data2regin when flush = '0' else
+		     	 x"00000000";
+	storeRegWr <= regwrin when flush = '0' else
+		     	'0';
 
 
-	ALUdata: nreg port map(clk,reset,s_write,storeALUData,ALUout);
-	setPCdata: nreg port map(clk,reset,s_write,storesetPCdata,setPCout);
-
-	G_NBit_dffg_1: for i in 0 to 1 generate
-	jumpdata: dffg
-		port map(clk,reset,s_write, storejumpdata(i), jumpout(i));
-	end generate G_NBit_dffg_1;
-
-	G_NBit_dffg_2: for i in 0 to 25 generate
-	jumpinstrdata: dffg
-		port map(clk,reset,s_write, storejumpinstrdata(i), jumpinstrout(i));
-	end generate G_NBit_dffg_2;
+	ALUOutputreg: nreg port map(clk,reset,s_write,storeALUOutput,ALUOutputout);
 
 	G_NBit_dffg_4: for i in 0 to 4 generate
 	writeData: dffg
 		port map(clk,reset,s_write, storewriteData(i), writeDataout(i));
 	end generate G_NBit_dffg_4;
 
-	zerodata: dffg port map(clk,reset,s_write,storezerodata,zeroout);
-	branchdata: dffg port map(clk,reset,s_write,storebranchdata,branchout);
 	memWrdatareg: dffg port map(clk,reset,s_write,memWrData,memwrout);
   	memtoregdata: dffg port map(clk,reset,s_write,storememtoregData,memtoregout);
+	haltdatareg: dffg port map(clk,reset,s_write,haltData,haltout);
+	data2regdata: nreg port map(clk,reset,s_write,storedata2reg,data2regout);
+	storeInstData: nreg port map(clk,reset,s_write,storeInst,instout);
+	regwrdata: dffg port map(clk,reset,s_write,storeRegWr,regwrout);
   
 end structural;

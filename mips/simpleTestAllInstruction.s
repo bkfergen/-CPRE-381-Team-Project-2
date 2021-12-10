@@ -7,23 +7,29 @@ main:
 	addi $a2, $zero, 20  	#$a2 = 20
 	NOP
 	NOP
+	NOP
 	add  $t3, $a1, $a2   	#$t3 = $a1 + $a2 = 30 
 	
 	addi $a3, $zero, -16 	#$a3 = -16
+	NOP
 	NOP
 	NOP
 	addu $t2, $zero, $a3 	#$t2 = 0xfffffff0
 	
 	NOP
 	NOP
+	NOP
 	addiu $a3, $t3, -2 	#$a3 = 28
+	NOP
 	NOP
 	NOP
 	addiu $a0, $a3, -30     #$a0 = 0xfffffffe
 	
 	NOP
 	NOP
+	NOP
 	and   $t1, $a0, $t2	#$a0 & $t2 = 0xfffffff0
+	NOP
 	NOP
 	NOP
 	andi  $t2, $t1, 0       #$t2 = 0x00000000
@@ -31,7 +37,8 @@ main:
 	# test on load words 
 	lui   $t4, 0x00001001  #$t4 = 0x10010000
 	NOP
-	NOP 
+	NOP
+	NOP
 	sw    $t3, 4($t4)      # store 0x000001e to the 0x10010004 
 	lw    $t1, 4($t4)      # get the data from 0x10010004 and store into the $t1, $t1 = 30 (0x0000001e)
 	

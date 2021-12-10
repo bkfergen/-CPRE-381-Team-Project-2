@@ -246,11 +246,11 @@ begin
            i_D1 => s_ALU_BarrelShifter_Output,
            o_O => s_Output8);
 
-  ALU_BarrelShifter_Output_Mux: mux2t1_N
+  ALU_Data2_Output_Mux: mux2t1_N
   generic map(N => N)
   port map(i_S => i_C(14),
            i_D0 => s_Output8,
-           i_D1 => i_Data2,
+           i_D1 => i_Data2(15 downto 0) & "0000",
            o_O => s_Output9);
 
   o_Output <= s_Output9;

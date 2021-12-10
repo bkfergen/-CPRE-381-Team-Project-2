@@ -310,6 +310,7 @@ architecture structure of MIPS_Processor is
   signal s_Id_pcAddr : std_logic_vector(31 downto 0);
   signal s_Id_RegWrAddr : std_logic_vector(4 downto 0);
   signal s_Id_RegWr : std_logic;
+  signal s_Id_DMemWr : std_logic;
 
 --EX
   signal s_Ex_add4 : std_logic_vector(31 downto 0);
@@ -387,6 +388,7 @@ begin
 
   s_DMemAddr <= s_Mem_Output;
   s_DMemData <= s_Mem_Data2Reg;
+  s_DMemWr <= s_Mem_DMemWr;
   
   DMem: mem
     generic map(ADDR_WIDTH => 10,
@@ -460,7 +462,7 @@ begin
     MemReg => s_MemReg,
     RegWr  => s_Id_RegWr,
     MemRd  => s_MemRd, -- seems to be always the same as MemReg so potentially unnecessary?
-    MemWr  => s_DMemWr,
+    MemWr  => s_Id_DMemWr,
     Branch => s_Branch,
     Jump   => s_Jump,
     sign   => s_sign,
@@ -498,7 +500,7 @@ begin
            pcAddrout => s_Ex_pcAddr,
            data2regout => s_Ex_Data2reg,
            branchin => s_Branch,
-           memWrin => s_DMemWr,
+           memWrin => s_Id_DMemWr,
            regdstin => s_RegDst,
            memtoregin => s_MemReg,
            jumpin => s_Jump,
